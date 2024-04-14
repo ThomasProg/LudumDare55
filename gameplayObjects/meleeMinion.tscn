@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ct6rvaawu2pf2" path="res://prefabs/abilities/aoeDamage.tscn" id="3_c86e2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yqult"]
-radius = 50.0
+radius = 40.0
 
 [node name="MeleeMinion" instance=ExtResource("1_p6y4y")]
 collision_layer = 2
@@ -14,8 +14,7 @@ collision_mask = 3
 currentLife = 20.0
 maxLife = 20.0
 
-[node name="Sprite2D" parent="." index="1"]
-scale = Vector2(0.025, 0.025)
+[node name="Sprite2D" parent="." index="2"]
 texture = ExtResource("2_u3meg")
 
 [node name="Controller" type="Node" parent="." index="3" node_paths=PackedStringArray("controlledPawn", "attackRange")]
@@ -30,3 +29,6 @@ collision_mask = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea2D" index="0"]
 shape = SubResource("CircleShape2D_yqult")
+
+[node name="NavigationAgent2D" parent="." index="5"]
+avoidance_enabled = true

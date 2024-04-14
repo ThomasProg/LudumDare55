@@ -1,5 +1,6 @@
-[gd_scene load_steps=17 format=3 uid="uid://o8jonsld36g1"]
+[gd_scene load_steps=24 format=3 uid="uid://o8jonsld36g1"]
 
+[ext_resource type="Shader" path="res://shaders/tilesetNoise.gdshader" id="1_2o0ao"]
 [ext_resource type="Texture2D" uid="uid://bujfj6uk2ytiy" path="res://sprites/colorpalette.png" id="1_yr8wu"]
 [ext_resource type="PackedScene" uid="uid://s2agncjucyqo" path="res://gameplayObjects/mainCharacter.tscn" id="2_qvc1j"]
 [ext_resource type="Script" path="res://scripts/controllers/EnemyController.gd" id="3_kd63v"]
@@ -9,6 +10,17 @@
 [ext_resource type="PackedScene" uid="uid://bfo4awe6emnif" path="res://prefabs/abilityButtons/aoeDamageButton.tscn" id="6_8j0kt"]
 [ext_resource type="PackedScene" uid="uid://bit0j7mf6n1b5" path="res://prefabs/abilityButtons/spawnMeleeMinionButton.tscn" id="7_xg0tf"]
 [ext_resource type="PackedScene" uid="uid://dyfhggpn0m52e" path="res://prefabs/abilityButtons/spawnRangedMinionButton.tscn" id="9_6pqca"]
+[ext_resource type="Script" path="res://scripts/restartButton.gd" id="11_qf22x"]
+[ext_resource type="Script" path="res://scripts/playerPath.gd" id="12_1wm4q"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dsafj"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_igd3p"]
+noise = SubResource("FastNoiseLite_dsafj")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rfosv"]
+shader = ExtResource("1_2o0ao")
+shader_parameter/noise = SubResource("NoiseTexture2D_igd3p")
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_fy2n3"]
 vertices = PackedVector2Array(16, 16, -16, 16, -16, -16, 16, -16)
@@ -120,12 +132,18 @@ sources/0 = SubResource("TileSetAtlasSource_ojpsj")
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pho4b"]
 bg_color = Color(0, 0, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_de011"]
+bg_color = Color(0.106717, 0.144104, 0.710788, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xba44"]
 bg_color = Color(0.566833, 0.0610471, 0, 1)
 
 [node name="World" type="Node2D"]
+y_sort_enabled = true
 
 [node name="TileMap" type="TileMap" parent="."]
+z_index = -100
+material = SubResource("ShaderMaterial_rfosv")
 tile_set = SubResource("TileSet_xe88y")
 rendering_quadrant_size = 32
 format = 2
@@ -149,14 +167,17 @@ target = NodePath("../Player")
 center = NodePath("../Center")
 spawnMeleePrefab = ExtResource("5_x8uyd")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("playerLifeProgressBar", "player", "abilitiesContainer", "pointsLabel", "timescaleSlider")]
+[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("playerLifeProgressBar", "enemyLifeProgressBar", "player", "enemy", "abilitiesContainer", "pointsLabel", "timescaleSlider", "infoLabel")]
 script = ExtResource("5_so2sh")
-playerLifeProgressBar = NodePath("Panel/MarginContainer/HBoxContainer/PlayerLifeProgressBar")
+playerLifeProgressBar = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/PlayerLifeProgressBar")
+enemyLifeProgressBar = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer2/EnemyLifeProgressBar")
 player = NodePath("../Player")
+enemy = NodePath("../Enemy")
 abilitiesContainer = NodePath("Panel/MarginContainer/HBoxContainer/AbilityButtons")
 abilityButtonPrefabs = Array[PackedScene]([ExtResource("6_8j0kt"), ExtResource("7_xg0tf"), ExtResource("9_6pqca")])
 pointsLabel = NodePath("Panel/MarginContainer/HBoxContainer/PointsRichTextLabel")
-timescaleSlider = NodePath("Panel/MarginContainer/HBoxContainer/TimescaleHSlider")
+timescaleSlider = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer3/TimescaleHSlider")
+infoLabel = NodePath("Panel2/MarginContainer/HBoxContainer/InfoRichTextLabel")
 
 [node name="Panel" type="Panel" parent="CanvasLayer"]
 anchors_preset = 10
@@ -178,38 +199,124 @@ theme_override_constants/margin_bottom = 20
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 30
 
 [node name="AbilityButtons" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="PlayerLifeProgressBar" type="ProgressBar" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer"]
+[node name="PointsRichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "Points: 0 "
+fit_content = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
+size_flags_vertical = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Player Life"
+fit_content = true
+
+[node name="PlayerLifeProgressBar" type="ProgressBar" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_pho4b")
+theme_override_styles/fill = SubResource("StyleBoxFlat_de011")
+value = 75.0
+show_percentage = false
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Enemy Life"
+fit_content = true
+
+[node name="EnemyLifeProgressBar" type="ProgressBar" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_vertical = 4
 theme_override_styles/background = SubResource("StyleBoxFlat_pho4b")
 theme_override_styles/fill = SubResource("StyleBoxFlat_xba44")
 value = 75.0
 show_percentage = false
 
-[node name="TimescaleHSlider" type="HSlider" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+tooltip_text = "Modify the speed of the game."
+text = "Time Scale"
+fit_content = true
+
+[node name="TimescaleHSlider" type="HSlider" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 1
 max_value = 200.0
 value = 100.0
 
-[node name="PointsRichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer"]
+[node name="Panel2" type="Panel" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -381.0
+offset_top = 110.0
+offset_right = 381.0
+offset_bottom = 194.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Panel2/MarginContainer"]
+layout_mode = 2
+
+[node name="InfoRichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel2/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
-bbcode_enabled = true
-text = "[right]Points : 0 [/right]"
+text = "A ghost stole your favorite hat!
+Summon your comrades to teach him a lesson!
+Move with Right click and use your spells wisely! (there are tooltips!)"
 fit_content = true
+
+[node name="RestartButton" type="Button" parent="CanvasLayer/Panel2/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Restart"
+script = ExtResource("11_qf22x")
 
 [node name="Center" type="Node2D" parent="."]
 position = Vector2(996, 606)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(1029, 553)
-zoom = Vector2(1.515, 1.515)
+position = Vector2(1029, 546.65)
+zoom = Vector2(1.5, 1.5)
+
+[node name="PlayerPath" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("12_1wm4q")
+player = NodePath("../Player")
+
+[connection signal="pressed" from="CanvasLayer/Panel2/MarginContainer/HBoxContainer/RestartButton" to="CanvasLayer/Panel2/MarginContainer/HBoxContainer/RestartButton" method="_on_pressed"]

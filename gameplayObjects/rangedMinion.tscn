@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cn565jokn4uin"]
 
 [ext_resource type="PackedScene" uid="uid://s2agncjucyqo" path="res://gameplayObjects/mainCharacter.tscn" id="1_7kdmp"]
-[ext_resource type="Texture2D" uid="uid://8p6dwxnxus1m" path="res://sprites/meleeGhost.png" id="2_3d5tm"]
+[ext_resource type="Texture2D" uid="uid://r4i3e6gyiasi" path="res://sprites/rangedGhost.png" id="2_3ci68"]
 [ext_resource type="Script" path="res://scripts/controllers/RangedController.gd" id="3_x30gm"]
 [ext_resource type="PackedScene" uid="uid://csan7wrr1di2q" path="res://prefabs/abilities/rangedAttack.tscn" id="4_4xspr"]
 
@@ -9,11 +9,13 @@
 currentLife = 7.5
 maxLife = 7.5
 
-[node name="Sprite2D" parent="." index="1"]
-scale = Vector2(0.025, 0.025)
-texture = ExtResource("2_3d5tm")
+[node name="Sprite2D" parent="." index="2"]
+texture = ExtResource("2_3ci68")
 
 [node name="Controller" type="Node" parent="." index="3" node_paths=PackedStringArray("controlledPawn")]
 script = ExtResource("3_x30gm")
 controlledPawn = NodePath("..")
 abilityPrefab = ExtResource("4_4xspr")
+
+[node name="NavigationAgent2D" parent="." index="4"]
+avoidance_enabled = true

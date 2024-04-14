@@ -6,29 +6,32 @@ extends Area2D
 @export var cost:float = 1
 @export var cooldown:float = 1.0
 
+@onready var particles:GPUParticles2D = $GPUParticles2D
+
 func start():
-	await abilityOwner.get_tree().physics_frame
-	await abilityOwner.get_tree().physics_frame
+	global_position = abilityOwner.global_position
+	await get_tree().physics_frame
+	await get_tree().physics_frame
 	
-	if (abilityOwner.currentPoints < cost):
+	if ((!is_instance_valid(abilityOwner)) or abilityOwner.currentPoints < cost):
 		queue_free()
 		return 
 	abilityOwner.currentPoints -= cost
+	
+	particles.emitting = true
 	
 	abilityOwner.isStopped = true
 	for mainCharacter in get_overlapping_bodies():
 		mainCharacter.dealDamages(dmg, abilityOwner)
 			
 	
-	abilityOwner.modulate = Color.BLUE
-	
-	await abilityOwner.get_tree().create_timer(0.1).timeout
-	
-	if (is_instance_valid(abilityOwner)):
-		abilityOwner.isStopped = false
-		abilityOwner.resetColor()
-	
-	queue_free()
+	#abilityOwner.modulate = Color.BLUE
+	abilityOwner.animPlayer.animation_finished.connect(func(anim_name: StringName):
+		if (is_instance_valid(abilityOwner)):
+			abilityOwner.isStopped = false
+		queue_free()
+		)
+	abilityOwner.animPlayer.play("attack")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -4,6 +4,29 @@
 [ext_resource type="PackedScene" uid="uid://xjuqvcync3tm" path="res://prefabs/abilities/spawnMeleeMinion.tscn" id="2_30cgb"]
 
 [node name="SpawnMeleeMinion" instance=ExtResource("1_1nd1g")]
-text = "Spawn
-Melee"
+custom_minimum_size = Vector2(80, 80)
+tooltip_text = "Spawns a ghost that attacks close enemies.
+Health: 20
+Damage: 10
+Cost: 10 points"
+text = ""
 abilityPrefab = ExtResource("2_30cgb")
+key = "W"
+
+[node name="MarginContainer" type="MarginContainer" parent="." index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer" index="0"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+bbcode_enabled = true
+text = "[center]Summon
+Melee
+[color=yellow]10[/color] / [color=dark_red]W[/color][/center]"
+fit_content = true

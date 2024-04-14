@@ -1,9 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://ct6rvaawu2pf2"]
+[gd_scene load_steps=6 format=3 uid="uid://ct6rvaawu2pf2"]
 
 [ext_resource type="Script" path="res://scripts/abilities/aoeDamageAbility.gd" id="1_u2c8s"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_a2ylf"]
 radius = 40.0
+
+[sub_resource type="Curve" id="Curve_4rjnr"]
+_data = [Vector2(0, 0.304651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wtkg6"]
+texture_mode = 1
+curve = SubResource("Curve_4rjnr")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iqchx"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 40.0
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 10.0
+alpha_curve = SubResource("CurveTexture_wtkg6")
 
 [node name="AOEDamage" type="Area2D"]
 collision_layer = 0
@@ -12,3 +29,11 @@ script = ExtResource("1_u2c8s")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_a2ylf")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+z_index = -10
+emitting = false
+amount = 148
+process_material = SubResource("ParticleProcessMaterial_iqchx")
+one_shot = true
+explosiveness = 1.0

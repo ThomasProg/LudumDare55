@@ -4,10 +4,30 @@
 [ext_resource type="PackedScene" uid="uid://ct6rvaawu2pf2" path="res://prefabs/abilities/aoeDamage.tscn" id="2_805qi"]
 
 [node name="AbilityButton" type="Button"]
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(80, 80)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-text = "AOE
-DMG"
+tooltip_text = "Deals damages in a zone around you.
+Damage: 10
+Cost: 10 points"
 script = ExtResource("1_lo1ci")
 abilityPrefab = ExtResource("2_805qi")
+key = "Q"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+bbcode_enabled = true
+text = "[center]AOE
+DMG
+[color=yellow]1[/color] / [color=dark_red]Q[/color][/center]"
+fit_content = true

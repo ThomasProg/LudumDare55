@@ -7,8 +7,21 @@ var entities:Array[Node2D] = []
 
 var timeScale:float = 1.0
 
+func reloadGame():
+	var _reload = get_tree().reload_current_scene()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	refresh()
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	refresh()
+
+func refresh():
+	player = null
+	mainCharacters.clear()
+	entities.clear()
+	
 	player = get_tree().root.find_child("Player")
 
 	var mainChars = get_tree().root.find_children("*", "MainCharacter", true, false)

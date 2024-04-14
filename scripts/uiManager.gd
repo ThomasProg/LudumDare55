@@ -40,7 +40,7 @@ func _process(delta):
 		enemyLifeProgressBar.max_value = enemy.maxLife
 		enemyLifeProgressBar.value = enemy.currentLife
 		
-		enemy.pointsPerSecond = lerp(1.5, 2.8, difficultySlider.value / 100.0)
+		enemy.pointsPerSecond = difficultySlider.value
 		
 	else:
 		enemyLifeProgressBar.value = 0

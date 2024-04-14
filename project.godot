@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Ludum Dare 55"
+config/name="Ghost’s Summoning War"
 run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"

@@ -11,6 +11,7 @@ extends CanvasLayer
 
 @export var pointsLabel:RichTextLabel
 @export var timescaleSlider:Slider
+@export var difficultySlider:Slider
 
 @export var infoLabel:RichTextLabel
 
@@ -38,6 +39,9 @@ func _process(delta):
 	if is_instance_valid(enemy):
 		enemyLifeProgressBar.max_value = enemy.maxLife
 		enemyLifeProgressBar.value = enemy.currentLife
+		
+		enemy.pointsPerSecond = lerp(1.5, 2.8, difficultySlider.value / 100.0)
+		
 	else:
 		enemyLifeProgressBar.value = 0
 		infoLabel.text = "Well played, you won! - Prog'z"

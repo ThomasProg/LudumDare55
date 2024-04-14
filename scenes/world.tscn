@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://o8jonsld36g1"]
+[gd_scene load_steps=26 format=3 uid="uid://o8jonsld36g1"]
 
 [ext_resource type="Shader" path="res://shaders/tilesetNoise.gdshader" id="1_2o0ao"]
 [ext_resource type="Texture2D" uid="uid://bujfj6uk2ytiy" path="res://sprites/colorpalette.png" id="1_yr8wu"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://scripts/uiManager.gd" id="5_so2sh"]
 [ext_resource type="PackedScene" uid="uid://xjuqvcync3tm" path="res://prefabs/abilities/spawnMeleeMinion.tscn" id="5_x8uyd"]
 [ext_resource type="PackedScene" uid="uid://bfo4awe6emnif" path="res://prefabs/abilityButtons/aoeDamageButton.tscn" id="6_8j0kt"]
+[ext_resource type="PackedScene" uid="uid://ct6rvaawu2pf2" path="res://prefabs/abilities/aoeDamage.tscn" id="6_y44kt"]
+[ext_resource type="PackedScene" uid="uid://spmuf4u410rl" path="res://prefabs/abilities/spawnRangedMinion.tscn" id="7_0d5ay"]
 [ext_resource type="PackedScene" uid="uid://bit0j7mf6n1b5" path="res://prefabs/abilityButtons/spawnMeleeMinionButton.tscn" id="7_xg0tf"]
 [ext_resource type="PackedScene" uid="uid://dyfhggpn0m52e" path="res://prefabs/abilityButtons/spawnRangedMinionButton.tscn" id="9_6pqca"]
 [ext_resource type="Script" path="res://scripts/restartButton.gd" id="11_qf22x"]
@@ -155,6 +157,7 @@ position = Vector2(494, 657)
 [node name="Enemy" parent="." instance=ExtResource("2_qvc1j")]
 position = Vector2(1488, 648)
 team = 1
+pointsPerSecond = 2.5
 
 [node name="PlayerController" type="Node" parent="." node_paths=PackedStringArray("controlledPawn")]
 script = ExtResource("3_lu5g1")
@@ -165,9 +168,11 @@ script = ExtResource("3_kd63v")
 controlledPawn = NodePath("../Enemy")
 target = NodePath("../Player")
 center = NodePath("../Center")
+aoePrefab = ExtResource("6_y44kt")
 spawnMeleePrefab = ExtResource("5_x8uyd")
+spawnRangedPrefab = ExtResource("7_0d5ay")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("playerLifeProgressBar", "enemyLifeProgressBar", "player", "enemy", "abilitiesContainer", "pointsLabel", "timescaleSlider", "infoLabel")]
+[node name="CanvasLayer" type="CanvasLayer" parent="." node_paths=PackedStringArray("playerLifeProgressBar", "enemyLifeProgressBar", "player", "enemy", "abilitiesContainer", "pointsLabel", "timescaleSlider", "difficultySlider", "infoLabel")]
 script = ExtResource("5_so2sh")
 playerLifeProgressBar = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/PlayerLifeProgressBar")
 enemyLifeProgressBar = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer2/EnemyLifeProgressBar")
@@ -177,6 +182,7 @@ abilitiesContainer = NodePath("Panel/MarginContainer/HBoxContainer/AbilityButton
 abilityButtonPrefabs = Array[PackedScene]([ExtResource("6_8j0kt"), ExtResource("7_xg0tf"), ExtResource("9_6pqca")])
 pointsLabel = NodePath("Panel/MarginContainer/HBoxContainer/PointsRichTextLabel")
 timescaleSlider = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer3/TimescaleHSlider")
+difficultySlider = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer4/DifficultyHSlider")
 infoLabel = NodePath("Panel2/MarginContainer/HBoxContainer/InfoRichTextLabel")
 
 [node name="Panel" type="Panel" parent="CanvasLayer"]
@@ -269,6 +275,22 @@ layout_mode = 2
 size_flags_vertical = 1
 max_value = 200.0
 value = 100.0
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+tooltip_text = "Modify the speed of the game."
+text = "Difficulty"
+fit_content = true
+
+[node name="DifficultyHSlider" type="HSlider" parent="CanvasLayer/Panel/MarginContainer/HBoxContainer/VBoxContainer4"]
+layout_mode = 2
+size_flags_vertical = 1
+value = 50.0
 
 [node name="Panel2" type="Panel" parent="CanvasLayer"]
 anchors_preset = 5

@@ -5,7 +5,9 @@ extends Node
 @export var target: Node2D
 @export var center: Node2D
 
+@export var aoePrefab:PackedScene
 @export var spawnMeleePrefab:PackedScene
+@export var spawnRangedPrefab:PackedScene
 
 func _ready():
 	# Make sure to not await during _ready.
@@ -26,7 +28,18 @@ func updateTarget():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if is_instance_valid(controlledPawn):
-		controlledPawn.runAbility(spawnMeleePrefab)
+		
+		var closeEntities = GameManager.entities.filter(func(a:MainCharacter):
+			return a.team != controlledPawn.team and controlledPawn.global_position.distance_to(a.global_position) < 40.0
+			)
+			
+		if (!closeEntities.is_empty()):
+			controlledPawn.runAbility(aoePrefab)
+
+		if (randi_range(0, 99) < 25):
+			controlledPawn.runAbility(spawnRangedPrefab)
+		else:
+			controlledPawn.runAbility(spawnMeleePrefab)
 
 func _physics_process(delta):
 	updateTarget()

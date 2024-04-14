@@ -6,6 +6,7 @@
 [node name="SpawnMeleeMinion" instance=ExtResource("1_1nd1g")]
 custom_minimum_size = Vector2(80, 80)
 tooltip_text = "Spawns a ghost that attacks close enemies.
+The ghost is attracted by the hat.
 Health: 20
 Damage: 10
 Cost: 10 points"

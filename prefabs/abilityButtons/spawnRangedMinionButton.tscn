@@ -6,6 +6,7 @@
 [node name="SpawnRangedMinion" instance=ExtResource("1_cw3bs")]
 custom_minimum_size = Vector2(80, 80)
 tooltip_text = "Spawn a ghost that attacks enemies from far away.
+The ghost is attracted by the hat.
 Health: 7.5
 Damage: 5
 Cost: 10 points"

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bit0j7mf6n1b5"]
+
+[ext_resource type="PackedScene" uid="uid://p8v0u4tpmira" path="res://prefabs/abilityButton.tscn" id="1_1nd1g"]
+[ext_resource type="PackedScene" uid="uid://xjuqvcync3tm" path="res://prefabs/abilities/spawnMeleeMinion.tscn" id="2_30cgb"]
+
+[node name="SpawnMeleeMinion" instance=ExtResource("1_1nd1g")]
+text = "Spawn
+Melee"
+abilityPrefab = ExtResource("2_30cgb")

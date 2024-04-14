@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dyfhggpn0m52e"]
+
+[ext_resource type="PackedScene" uid="uid://p8v0u4tpmira" path="res://prefabs/abilityButton.tscn" id="1_cw3bs"]
+[ext_resource type="PackedScene" uid="uid://spmuf4u410rl" path="res://prefabs/abilities/spawnRangedMinion.tscn" id="2_3f4ow"]
+
+[node name="SpawnRangedMinion" instance=ExtResource("1_cw3bs")]
+text = "Spawn
+Ranged"
+abilityPrefab = ExtResource("2_3f4ow")

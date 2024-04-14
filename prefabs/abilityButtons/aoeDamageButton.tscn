@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfo4awe6emnif"]
+
+[ext_resource type="Script" path="res://scripts/abilityButtons/abilityButton.gd" id="1_lo1ci"]
+[ext_resource type="PackedScene" uid="uid://ct6rvaawu2pf2" path="res://prefabs/abilities/aoeDamage.tscn" id="2_805qi"]
+
+[node name="AbilityButton" type="Button"]
+custom_minimum_size = Vector2(64, 64)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "AOE
+DMG"
+script = ExtResource("1_lo1ci")
+abilityPrefab = ExtResource("2_805qi")

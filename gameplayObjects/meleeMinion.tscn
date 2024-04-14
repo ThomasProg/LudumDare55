@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://br4i1jtv4fce1"]
+
+[ext_resource type="PackedScene" uid="uid://s2agncjucyqo" path="res://gameplayObjects/mainCharacter.tscn" id="1_p6y4y"]
+[ext_resource type="Script" path="res://scripts/controllers/MeleeController.gd" id="2_lfkfn"]
+[ext_resource type="Texture2D" uid="uid://8p6dwxnxus1m" path="res://sprites/meleeGhost.png" id="2_u3meg"]
+[ext_resource type="PackedScene" uid="uid://ct6rvaawu2pf2" path="res://prefabs/abilities/aoeDamage.tscn" id="3_c86e2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yqult"]
+radius = 50.0
+
+[node name="MeleeMinion" instance=ExtResource("1_p6y4y")]
+collision_layer = 2
+collision_mask = 3
+currentLife = 20.0
+maxLife = 20.0
+
+[node name="Sprite2D" parent="." index="1"]
+scale = Vector2(0.025, 0.025)
+texture = ExtResource("2_u3meg")
+
+[node name="Controller" type="Node" parent="." index="3" node_paths=PackedStringArray("controlledPawn", "attackRange")]
+script = ExtResource("2_lfkfn")
+controlledPawn = NodePath("..")
+attackRange = NodePath("../AttackArea2D")
+abilityPrefab = ExtResource("3_c86e2")
+
+[node name="AttackArea2D" type="Area2D" parent="." index="4"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea2D" index="0"]
+shape = SubResource("CircleShape2D_yqult")

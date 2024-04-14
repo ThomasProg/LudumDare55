@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://xjuqvcync3tm"]
+
+[ext_resource type="Script" path="res://scripts/abilities/spawnMinion.gd" id="1_xkdyw"]
+[ext_resource type="PackedScene" uid="uid://br4i1jtv4fce1" path="res://gameplayObjects/meleeMinion.tscn" id="2_e6axe"]
+
+[node name="SpawnMeleeMinion" type="Node"]
+script = ExtResource("1_xkdyw")
+toSpawn = ExtResource("2_e6axe")
